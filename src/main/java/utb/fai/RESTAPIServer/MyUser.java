@@ -6,12 +6,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 
 @Entity
 @Table(name = "users")
+@Access(AccessType.FIELD)
 public class MyUser {
 
-    private Long id;
     private String name;
     private String email;
     private String phoneNumber;
@@ -26,6 +28,8 @@ public class MyUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -51,5 +55,4 @@ public class MyUser {
                 && phoneNumber.matches("^\\+420\\d{9}$");
     }
     /** Assignment format: a non-empty name, standard email and Czech +420 phone. */
-    public void setUserDataValid(boolean userDataValid) {}
 }
