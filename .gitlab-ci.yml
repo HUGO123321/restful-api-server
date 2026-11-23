@@ -11,6 +11,9 @@ stages:
 build_application:
   stage: build
   script:
+    - test -n "$DB_URL" || (echo "Missing DB_URL CI/CD variable" && exit 1)
+    - test -n "$DB_USERNAME" || (echo "Missing DB_USERNAME CI/CD variable" && exit 1)
+    - test -n "$DB_PASSWORD" || (echo "Missing DB_PASSWORD CI/CD variable" && exit 1)
     - chmod +x ./gradlew
     - ./gradlew build
   artifacts:
@@ -21,7 +24,10 @@ build_application:
 black_box_testing:
   stage: test
   script:
-    - java -jar NATT.jar -nc https://gitlab.com/ap5vs/test-config/restful-api-server-config/-/raw/main/test-config-6.yaml?ref_type=heads
+    - test -n "$DB_URL" || (echo "Missing DB_URL CI/CD variable" && exit 1)
+    - test -n "$DB_USERNAME" || (echo "Missing DB_USERNAME CI/CD variable" && exit 1)
+    - test -n "$DB_PASSWORD" || (echo "Missing DB_PASSWORD CI/CD variable" && exit 1)
+    - java -jar NATT.jar -nc "https://gitlab.com/ap5vs/test-config/restful-api-server-config/-/raw/main/test-config-6.yaml?ref_type=heads"
   artifacts:
     when: always
     paths:
